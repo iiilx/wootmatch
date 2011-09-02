@@ -1,0 +1,10 @@
+<div style="margin-top:40px;"><a class="footerlink" onclick="return showPrivacy()" href="#privacy">Privacy Policy</a> <a class="footerlink" onclick="return showTos()" href="#tos">Terms of Use</a> <a href="#delete-account" class="footerlink" onclick="return showDelete()">Delete My Account</a></div>
+<div id="footer">
+    <div id="privacy" style="display:none">By authorizing this application, you grant {{app_name}} access to your basic profile information and email address. None of this information will be used for other purposes or sold to any third parties.</div>
+    <div id="tos" style="display:none">In order for this app to function properly, you agree to allow us to access your basic profile information and email address.  Furthermore, any attempts to abuse the application may result in loss of access to your {{app_name}} account.</div>
+    <div id="delete-account" style="display:none">
+    <div class="head">If you delete your account, all the information regarding who you like will be deleted.</div>
+    <div class="body"><form action="{% url delete_account %}" method="post" >{% csrf_token %} <input class="myButton" type="submit" value="Delete Account"></form></div>
+    </div>
+</div>
+

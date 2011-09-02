@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block extra_head %}
+<script type="text/javascript" src="http://connect.facebook.net/en_US/all.js"></script>
+{% endblock %}
+
+{% block fbdiv %}
+<div id="fb-root"></div>
+<h3 style="display:none">token: {{token}}</h3>
+{% endblock %}
+
+{% block about %}
+<div id="about" style="{% if not first_visit %}display:none{% endif %}">
+{% include "about.html" %}
+</div>
+{% endblock %}
+
+
+{% block content %}
+<div style="display:none" id="extra">
+<div class="head" id="extra_title">
+</div>
+<div class="body">
+<input style="display:inline" size="50" name="personal_msg" id="personal_msg" />
+<input id="msg_id" type="hidden" />
+<button onclick="return sendPersonalMsg()" class="myButton">Submit</button>
+<button onclick="return hideExtra()" class="myButton">Cancel</button>
+
+</div>
+</div>
+
+<div id="tbl_container"{% if not likes_tup %} style="display:none"{% endif %}>
+<div class="head">You currenty like <span id="num_likes"></span></div>
+<div class="body">
+<table id="tbl1">
+<thead><th>Name</th><th id="tbl_rank">Rank</th><th>Has App</th><th id="tbl_msg">Message</th><th>Remove</th></thead>
+<tbody>
+{% if likes_tup %}
+{% for like, has_app in likes_tup %}
+<tr id="{{like.like.uid}}"><td>{{like.like.name}}</td><td>{{forloop.counter}}</td><td>{{has_app|yesno:"yes,no,maybe"}}</td><td id="msg{{forloop.counter}}">{% if like.msg %}<a href="#" class="lb" onclick="return editMessage('{{like.like.uid}}')">yes</a>{% else %}<a href="#" class="lb" onclick="return showCreateMsg('{{like.like.uid}}')">create</a> {% endif %}</td>
+<td><a href="#tbl1" class="myButton" onclick="return removePerson('{{like.like.uid}}')">Remove</a></td></tr>
+{% endfor %}
+{% endif %}
+</tbody>
+</table>
+</div>
+</div>
+
+<div class="head">Who are you interested in?</div>
+<div class="body">
+<fieldset id="autocomplete" style="display:inline">    <input style="display:inline" size="30" name="example" id="example" />
+ <a href="#" style="display:inline" class="myButton" onclick="return addLikeAuto()">Add</a>
+<span style="dispay:inline;padding-left:20px;"> not working? <a href="#" class="lb" onclick="switchForm()">try this</a> or <a href="/" class="lb">refresh</a></span>
+</fieldset>
+<fieldset id="normal" style="display:none">
+<select id="friends">
+
+ </select>
+<a href="#" class="myButton" onclick="return addLikeNormal()">Add</a>
+</fieldset>      
+</div>
+<div class="head">Your best match will notified at:</div>
+<div class="body">
+    <span id="old_email">{{email}}<a style="margin-left:10px;" href="#old_email" onclick="return showEmail()" class="myButton">Change</a></span> 
+    <div id="change_email" style="display:none">Change to: <form action="{% url change_email %}" style="display:inline" method="post">{% csrf_token %}<input id="new_email" size="10" type="text" name="email"/> <input style="display:inline" class="myButton" type="submit" onclick="return validEmail()" value="Change"></form></div>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+{% include "footer_normal.html" %}
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+  FB.init({
+    appId  : '{{app_id}}',
+    status : true, // check login status
+    cookie : true, // enable cookies to allow the server to access the session
+    xfbml  : true  // parse XFBML
+  });
+
+    FB.api({method: 'fql.query', query: "{{query|safe}}"}, function(response) {
+        var response = response.sort(function(a,b) {
+            var n1 = a.name.toLowerCase();
+            var n2 = b.name.toLowerCase();
+            if (n1 < n2) {return  -1}
+            else {return 1} 
+            });
+        window.ppl = response;
+        var globaldata=[];
+        var fids=[];
+        div=document.getElementById("ppl");
+        for(i in response){
+            globaldata.push(response[i].name); 
+            fids.push(response[i].uid);
+            };
+        $("#example").autocomplete({source:globaldata});
+        $("#example").watermark("Type the name of a Facebook friend:");
+        window.globaldata = globaldata;
+        window.fids = fids;
+        });
+      //test
+
+    $("#tbl1").tableDnD({
+          onDrop: function(table, row) {
+            updateRanks();
+          }
+    });
+updateNumber();
+$("#loading").hide();
+$("#wrapper").show();
+</script>
+{% endblock %}
+

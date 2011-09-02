@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>LikeEachOther</title>
+<link rel="stylesheet" href="/media/css/all.css" type="text/css" />
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<link rel="stylesheet" href="/media/css/all.css" type="text/css" />
+<script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.core.js"></script>
+<script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.position.js"></script>
+<script type="text/javascript" src="/media/js/all.js"></script>
+</head>
+<body>
+{% block fbdiv %}
+{% endblock fbdiv %}
+<div style="margin-left:auto;margin-right:auto;"><a href="/"><img src="/media/images/like.gif" alt="likeeachother" style="padding-bottom:10px;" /></a></div>
+
+<div class="head">Matching is in progress!</div>
+<div class="body">You will not be able to update your ranking or add people you like during this time. Please check back to see if matching has finished!</div>
+
+<div class="head">About LikeEachOther <a href="#" class="lb" onclick="hideAbout()">hide</a>
+</div>
+<div class="body">
+<p><b>What's the point?</b> Findout if there is any mutual interest between friends on Facebook!</p>
+<br />
+<p><b>What happens when I add someone I like?</b> We keep track of who you like, and you find out if they like you back when we begin the matching process, which takes place once a week every Monday at 8am.</p><br /> 
+<p><b>What happens when I'm matched?</b> Both you and the person you like will be notified via email <b>only if</b> you two like each other (you both must have LikeEachOther). If it is not mutual, <b>no one</b> will be notified and no one will know who you like.
+</p>
+<br />
+<p><b>How are people matched?</b> A score is calculated based on how you rank the people you like, indicating the strength of the match between two people who like each other. The matches with the best scores are notified first and all matches will be notified in the order of the calculated score.</p><br />
+<p><b>How do I get more people to use this?</b> Just <a class="lb" href="#" onclick="return tellPeople()">spread the word!</a></p>
+</div>
+
+
+<div style="margin-top:40px;"><a class="footerlink" onclick="return showPrivacy()" href="#privacy">Privacy Policy</a> <a class="footerlink" onclick="return showTos()" href="#tos">Terms of Use</a> </div>
+<div id="footer">
+    <div id="privacy" style="display:none">By authorizing this application, you grant LikeEachOther access to your basic profile information and email address. None of this information will be used for other purposes or sold to any third parties.</div>
+    <div id="tos" style="display:none">In order for this app to function properly, you agree to allow us to access your basic profile information and email address.  Furthermore, any attempts to abuse the application may result in loss of access to your LikeEachOther account.</div>
+    <div id="delete-account" style="display:none">
+    </div>
+</div>
+</body>
+</html>

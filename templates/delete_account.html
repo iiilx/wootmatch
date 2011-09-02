@@ -1,0 +1,3 @@
+    <div class="head">If you delete your account, all the information regarding who you like will be deleted.</div>
+    <div class="body"><form action="{% url delete_account %}" method="post" >{% csrf_token %} <input class="myButton" type="submit" value="Delete Account"></form></div>
+

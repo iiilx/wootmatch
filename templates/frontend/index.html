@@ -1,0 +1,48 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>{{APP_NAME}}</title>
+<link rel="stylesheet" href="/media/css/all2.css" type="text/css" />
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.core.js"></script>
+<script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.position.js"></script>
+<script type="text/javascript" src="/media/js/qtip.js"></script>
+<script type="text/javascript" src="/media/js/all2.js"></script>
+{% block extra_head %}
+{% endblock extra_head %}
+</head>
+<body>
+{% block fbdiv %}
+{% endblock fbdiv %}
+{% include "logo.html" %}
+<br />
+
+<center><a href="{{REDIRECT_LINK}}" class="myButton2">Get started!</a></center>
+<div id="about">
+<div class="head">How it works
+</div>
+<div class="body">
+<p><b>What's the point?</b> Findout if there is any mutual interest between friends on Facebook!</p>
+<br />
+<p><b>What happens when I add someone I like?</b> We keep track of who you like, and you find out if they like you back when we begin the matching process, which takes place once a week every Monday at 8am.</p><br /> 
+<p><b>What happens when I'm matched?</b> Both you and the person you like will be notified via email <b>only if</b> you two like each other (you both must have {{app_name}}). If it is not mutual, <b>no one</b> will be notified and no one will know who you like.
+</p>
+<br />
+<p><b>How are people matched?</b> A score is calculated based on how you rank the people you like, indicating the strength of the match between two people who like each other. The matches with the best scores are notified first and all matches will be notified in the order of the calculated score.</p><br />
+<p><b>How often can I get matched?</b> Currently, you can only be elgibile for matching if your last match was more than one month ago or if you've never been matched. This is to prevent people from discovering everyone that likes them and so that matches have time to date each other or whatever they decide.</p>
+<br />
+<p><b>I got matched, and don't want to be notified for any other matches</b> Just remove all your "likes" or delete your account, and you will not be matched with anyone else. You can always reactivate later if something happens.</p>
+</div>
+</div>
+
+
+<div id="wrapper" style="display:none">
+{% block content %}
+
+{% endblock %}
+</div>
+{% include "footer_updating.html" %}
+
+</body>
+</html>

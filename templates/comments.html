@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block extra_head %}
+<script type="text/javascript" src="/media/js/suggestion.js"></script>
+<script>
+$(document).ready(function() {
+
+// get current number of characters
+$('#title_count').html($('#id_title').val().length + ' characters');
+
+$('#id_title').keyup(function() {
+    // get new length of characters
+    $('#title_count').html($(this).val().length + ' characters');
+});
+
+$('#suggestion_count').html($('#id_suggestion').val().length + ' characters');
+
+$('#id_suggestion').keyup(function() {
+    // get new length of characters
+    $('#suggestion_count').html($(this).val().length + ' characters');
+});
+
+$.fn.qtip.styles.mystyle = { 
+   width: 200,
+   color: 'black',
+   border: {
+      radius: 5,
+   },
+   tip: 'topMiddle',
+    name: 'blue'
+};
+
+    {% for s in suggestions %}
+        $("tbody tr:nth-child({{forloop.counter}})").qtip({
+            content: '{{s.suggestion}}', 
+            show: 'mouseover',
+            hide: 'mouseout',
+            style: 'mystyle', 
+            position: { corner: { target: 'bottomMiddle', tooltip: 'topMiddle' } }    
+        });
+    {% endfor %}
+$("#loading").hide();
+$("#wrapper").show();
+});
+
+
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="head">Vote on suggestions</div>
+<div class="body">
+{% if suggestions %}
+<table id="tbl1">
+<thead><th style="">Suggestion</th><th>Votes</th><th>Upvote</th><th>Admin Comments</th></thead>
+<tbody>
+{% for s in suggestions %}
+<tr><td>{{s.title}}</td> <td id="{{s.id}}">{{s.votes}}</td><td><a href="#" onclick="return upvote({{s.id}})"><img src="/media/images/1.gif" /></a></td><td>{% firstof s.dev_comment "n/a" %}</td></tr>
+{% endfor %}
+</tbody>
+</table>
+{% else %}
+<center>There are no suggestions right now.</center>
+{% endif %}
+</div>
+<div class="head">
+Do you have a suggestion not listed above?
+</div>
+<div class="body">
+<form action="" method="post"> {% csrf_token %}
+<p style="font-weight:bold">Title of your suggestion</p> {{form.title}} {{form.title.errors}} 
+<p><span id="title_count"></span><span> (100 max)</span></p>
+<p style="font-weight:bold;margin-top:10px;">Full description of your suggestion and reasons why it should be implemented</p> {{form.suggestion}} {{form.suggestion.errors}}
+<p> <span id="suggestion_count"></span><span> (400 max)</span></p>
+<div style="margin:15px;"></div>
+<input type="submit" style="display:block" value="Add Suggestion" class="myButton" />
+</form>
+</div>
+{% endblock %}
+
+{% block footer %}
+{% include "footer_normal.html" %}
+{% endblock %}

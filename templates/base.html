@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>{{app_name}}</title>
+<link rel="stylesheet" href="/media/css/all2.css" type="text/css" />
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.core.js"></script>
+<script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.position.js"></script>
+<script type="text/javascript" src="/media/js/qtip.js"></script>
+<script type="text/javascript" src="/media/js/all2.js"></script>
+{% block extra_head %}
+{% endblock extra_head %}
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-12460479-17']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+<body>
+{% block fbdiv %}
+{% endblock fbdiv %}
+{% include "logo.html" %}
+<br />
+<div id="about" style="display:none">
+{% include "about.html" %}
+</div>
+
+{% include "links.html" %}
+
+{% block about %}
+{% endblock %}
+
+<div id="loading">
+<center><img src="/media/images/ajax-loader.gif" /> 
+<p>loading data from Facebook :(</p>
+</center>
+</div>
+
+
+<div id="wrapper" style="display:none">
+{% block content %}
+
+{% endblock %}
+</div>
+
+{% block footer %}
+
+{% endblock %}
+
+{% block js %}
+{% endblock %}
+</body>
+</html>

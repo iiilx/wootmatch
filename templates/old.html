@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>LikeEachOther</title>
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<link rel="stylesheet" href="http://jqueryui.com/themes/base/jquery.ui.all.css" type="text/css" />
+<link rel="stylesheet" href="/media/css/main.css" type="text/css" />
+<script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.core.js"></script>
+<script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.position.js"></script>
+<script type="text/javascript" src="http://jqueryui.com/ui/jquery.ui.autocomplete.js"></script>
+<script type="text/javascript" src="/media/js/jquery.watermark.min.js"></script>
+<script type="text/javascript" src="http://connect.facebook.net/en_US/all.js"></script>
+<script type="text/javascript" src="/media/js/like.js"></script>
+</head>
+<body>
+<div id="fb-root"></div>
+<h3 style="display:none">token: {{token}}</h3>
+<div style="margin-left:auto;margin-right:auto;"><img src="/media/images/like.gif" alt="likeeachother" style="padding-bottom:10px;" /></div>
+<div style="margin-bottom:25px;">
+<p><b>What's the point?</b> The point is to findout if there is any mutual interest between friends on Facebook. If you want to date a friend, but don't want to risk losing your friendship, this app reduces that risk and removes any potential awkwardness in case the other person does not feel the same way.</p>
+<br />
+<p><b>What happens when I add someone I like?</b> First of all, the information will be kept private. Both you and the person you like will be notified <b>only if</b> you two like each other (you both must have LikeEachOther). If it is not mutual, <b>no one</b> will know or find out who you like.
+</p>
+<br />
+<p><b>How do I get more people to use it?</b> Just <a class="lb" href="#" onclick="return tellPeople()">spread the word!</a></p>
+</div> 
+<div id="promote" style="display:none">
+    <div class="head"><p>Not all of the people you like even have this app!</p></div>
+    <div class="body"> <a href="#" class="myButton" onclick="return tellPeople()">Tell your friends</a></div>
+</div>
+
+
+{% if likeslist %}
+<div class="head">You currenty like <span id="likesh"></span></div>
+<div id="likes" class="body">
+
+<table id="tbl1">
+<thead>
+<tr><th>Name</th><th>Match</th><th>Has App</th></tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<div style="margin-top:5px;display:inline"><b>last updated:</b> <span id="last_update">{{last_update}}</span>  
+<p style="margin-top:5px;"><a class="myButton" href="#" onclick="return update_matches()">Update</a></p></div>
+</div>
+
+{% endif %}
+{% if not max %}
+<div class="head">Who are you interested in?</div>
+<div class="body">
+    <form style="margin-top:3px;" id="interest" action="" method="post">
+    {% csrf_token %}
+<fieldset>    <input style="display:inline" size="30" name="example" id="example" />
+    <div style="display:inline" id="ppl">
+       <input style="display:none" id="intz" name="intz" />
+        <input style="display:none" name="name" /> <input style="display:inline" class="myButton" type="submit" value="Submit" onclick="return changeValue()" />
+    </div>    
+    </fieldset>
+    </form>    
+{% if message %}
+<p style="color:red">{{message}}</p>
+{% endif %}
+
+</div>
+{% endif %}
+
+<div class="head">You will notified at:</div>
+<div class="body">
+    <span id="old_email">{{email}} <a style="margin-left:10px;" href="#" onclick="return showEmail()" class="myButton">Change</a></span> 
+    <div id="change_email" style="display:none">Change to: <form action="{% url change_email %}" style="display:inline" method="post">{% csrf_token %}<input id="new_email" size="10" type="text" name="email"/> <input style="display:inline" class="myButton" type="submit" onclick="return validEmail()" value="Change"></form></div>
+</div>
+
+{% if likeslist %}
+<div class="head">Lose interest?</div>
+<div class="body">  <form style="display:inline" action="{% url remove_person %}" method="post">
+{% csrf_token %}
+<fieldset><select id="remove" name="remove">
+</select> 
+<input style="display:inline" class="myButton" type="submit" value="Remove" />
+</fieldset>
+</form>
+
+</div>
+{% endif %}
+
+<div style="margin-top:40px;"><a class="footerlink" href="{% url privacy %}">Privacy Policy</a> <a class="footerlink" href="{% url tos %}">Terms of Use</a></div>
+<script type="text/javascript">
+  FB.init({
+    appId  : '{{app_id}}',
+    status : true, // check login status
+    cookie : true, // enable cookies to allow the server to access the session
+    xfbml  : true  // parse XFBML
+  });
+
+    FB.api({method: 'fql.query', query: "{{query|safe}}"}, function(response) {
+        window.ppl = response;
+        var globaldata=[];
+        var fids=[];
+        div=document.getElementById("ppl");
+        for(i in response){
+            globaldata.push(response[i].name); 
+            fids.push(response[i].uid);
+            };
+        {% if not max %}
+        $("#example").autocomplete({source:globaldata});
+        $("#example").watermark("Type the name of a Facebook friend:");
+        {% endif %}
+        window.globaldata = globaldata;
+        window.fids = fids;
+        {% if likeslist %}
+        var likeslist=[{{likeslist}}];
+        window.likeslist = likeslist;
+        var p = ' people: '
+        if (likeslist.length==1){p=' person: ';};
+        if (likeslist.length==4){p += '(4 people is the max)'};
+        document.getElementById("likesh").innerHTML += ' ' + likeslist.length.toString() + p;
+        for(i in likeslist){
+            name = globaldata[fids.indexOf(likeslist[i].toString())];
+            var option = document.createElement("option");
+            option.value = likeslist[i];
+            option.innerHTML = name;
+            document.getElementById('remove').appendChild(option);
+            var tr = document.createElement("tr");
+            var td1 = document.createElement("td");
+            td1.innerHTML = name;
+            tr.appendChild(td1);
+            var td2 = document.createElement("td");
+            tr.appendChild(td2);
+            var td3 = document.createElement("td");
+            tr.appendChild(td3);
+            document.getElementsByTagName("tbody")[0].appendChild(tr);
+        }
+        {% endif %}
+        });
+      //test
+
+
+</script>
+</body>
+</html>

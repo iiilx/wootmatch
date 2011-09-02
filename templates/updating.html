@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="head">Matching is in progress!</div>
+<div class="body">You will not be able to update your ranking or add people you like during this time. Please check back to see if matching has finished!</div>
+{% endblock %}
+
+{% block footer %}
+{% include "footer_updating.html" %}
+{% endblock %}
+
+{% block js %}
+<script>
+$(document).ready(function() {
+$("#loading").hide();
+$("#wrapper").show();
+});
+</script>
+{% endblock %}
